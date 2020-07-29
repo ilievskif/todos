@@ -49,10 +49,10 @@ const actions = {
             delete_todos(where: {id : {_eq: $id}}){
               affected_rows
             }
-          }`).then(commit('removeTodo', id));
-
-
-
+          }`,
+      {
+        id: id,
+      }).then(commit('removeTodo', id));
     // commit('removeTodo', id);
   },
 
