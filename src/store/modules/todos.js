@@ -12,7 +12,6 @@ const getters = {
 const actions = {
 
   fetchTodos({ commit }) {
-    // const response = await axios.get('https://jsonplaceholder.typicode.com/todos');
     gql(`query allTodos {
             todos{
               id
@@ -24,10 +23,10 @@ const actions = {
 
   },
 
-  addTodo({ commit }) {
-    // const response = await axios.post('https://jsonplaceholder.typicode.com/todos', {title, complited: false});  
-    gql(`mutation addTodo($userId :Int!, $title: String!, $complited: Boolean!){
-            action: insert_todos(objects: {userId: $userId, title: $title, completed: $complited }){
+  addTodo({ commit }, title) {
+    gql(
+      `mutation addTodo($userId :String!, $title: String!){
+            action: insert_todos(objects: {userId: $userId, title: $title, completed: false }){
               returning{
                 id
                 title
@@ -35,9 +34,12 @@ const actions = {
                 userId
               }
             }
-          }`).then(resp => commit("newTodo", resp.data)); // does not print title
-
-    // commit('newTodo', response.data);
+          }`,
+      {
+        userId: "1",
+        title: title,
+      }
+    ).then((resp) => commit("newTodo", resp.data.data.action.returning[0]));
   },
 
   deleteTodo({ commit }, id) {
