@@ -1,4 +1,4 @@
-import axios from "axios";
+// import axios from "axios";
 import gql from "./gql";
 
 const state = {
@@ -76,11 +76,23 @@ const actions = {
 
   },
 
-  async updateTodo({ commit }, updTodo) {
+  updateTodo({ commit }, updTodo) {
 
-    const response = await axios.put(`https://jsonplaceholder.typicode.com/todos/${updTodo.id}`, updTodo);
-
-    commit('updateTodo', response.data);
+    // const response = await axios.put(`https://jsonplaceholder.typicode.com/todos/${updTodo.id}`, updTodo);
+    gql(`mutation updateTodo($id: Int!, $completed: Boolean!) {
+      update_todos_by_pk(pk_columns: {id: $id}, _set: {completed: $completed}) {
+        id
+        title
+        completed
+        userId
+      }
+    }`,
+      {
+        id: updTodo.id,
+        completed: updTodo.completed
+      }).then(resp => commit('updateTodo', resp.data.data.update_todos_by_pk));
+    // console.log(response.data);
+    // commit('updateTodo', response.data);
 
   }
 
