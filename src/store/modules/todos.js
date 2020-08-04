@@ -94,7 +94,28 @@ const actions = {
     // console.log(response.data);
     // commit('updateTodo', response.data);
 
+  },
+
+  // Edit TODO
+  editTodo({ commit }, edTodo) {
+    gql(`mutation editTodo($id: Int!, $title: String!) {
+      update_todos_by_pk(pk_columns: {id: $id}, _set: {title: $title}){
+        id
+        title
+        completed
+        userId
+      }
+    }`,
+      {
+        id: edTodo.id,
+        title: edTodo.title
+      }).then(resp => commit('editTodo', resp.data.data.update_todos_by_pk));
+
+    // commit('removeTodo', edTodo.id);
+    location.reload();
+
   }
+
 
 };
 
@@ -109,7 +130,14 @@ const mutations = {
     if (index !== -1) {
       state.todos.splice(index, 1, updTodo);
     }
-  }
+  },
+  editTodo(state, edTodo) {
+    const index = state.todos.findIndex(todo => todo.id === edTodo.id);
+
+    if (index !== -1) {
+      state.todos.push(index, 1, edTodo);
+    }
+  },
 };
 
 export default {
