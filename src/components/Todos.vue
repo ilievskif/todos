@@ -20,9 +20,14 @@
       >
         {{todo.title}}
         <div class="icon-group">
-          <i @click="handleSelectItem(todo)" v-on:click="isHidden = !isHidden" class="fas fa-edit"></i>
+          <i
+            @click="handleSelectItem(todo)"
+            v-on:click="isHidden = !isHidden"
+            class="fas fa-edit"
+            title="Edit this Todo"
+          ></i>
 
-          <i @click="deleteTodo(todo.id)" class="fas fa-trash-alt"></i>
+          <i @click="deleteTodo(todo.id)" class="fas fa-trash-alt" title="Delete this Todo"></i>
         </div>
       </div>
     </div>
